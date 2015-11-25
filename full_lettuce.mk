@@ -15,9 +15,6 @@
 #
 
 # Inherit from those products. Most specific first.
-ifneq ($(LETTUCE_32_BIT),true)
-$(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit.mk)
-endif
 $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
 
 # Inherit from lettuce device
@@ -29,3 +26,16 @@ PRODUCT_NAME := full_lettuce
 PRODUCT_BRAND := YU
 PRODUCT_MODEL := YU5010
 PRODUCT_MANUFACTURER := YU
+
+PRODUCT_GMS_CLIENTID_BASE := android-micromax
+
+TARGET_VENDOR_PRODUCT_NAME := YUPHORIA
+TARGET_VENDOR_DEVICE_NAME := YUPHORIA
+PRODUCT_BUILD_PROP_OVERRIDES += TARGET_DEVICE=YUPHORIA PRODUCT_NAME=YUPHORIA
+
+## Use the latest approved GMS identifiers unless running a signed build
+ifneq ($(SIGN_BUILD),true)
+PRODUCT_BUILD_PROP_OVERRIDES += \
+    BUILD_FINGERPRINT=YU/YUPHORIA/YUPHORIA:5.0.2/LRX22G/YNG1TBS2P2:user/release-keys \
+    PRIVATE_BUILD_DESC="YUPHORIA-user 5.0.2 LRX22G YNG1TBS2P2 release-keys"
+endif

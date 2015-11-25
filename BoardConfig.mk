@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2014 The CyanogenMod Project
+# Copyright (C) 2015 The AOSParadox Project
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,63 +13,111 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
--include device/cyanogen/msm8916-common/BoardConfigCommon.mk
+# inherit from common msm8916_64
+-include device/qcom/msm8916_64/BoardConfig.mk
 
-DEVICE_PATH := device/yu/lettuce
+TARGET_SPECIFIC_HEADER_PATH := device/yu/lettuce//include
 
-TARGET_SPECIFIC_HEADER_PATH := $(DEVICE_PATH)/include
+# Platform
+TARGET_NO_BOOTLOADER := true
+TARGET_CPU_CORTEX_A53 := true
 
-# Kernel
-ifneq ($(FORCE_32_BIT),true)
-TARGET_KERNEL_CONFIG := cyanogenmod_lettuce-64_defconfig
-else
-TARGET_KERNEL_CONFIG := cyanogenmod_lettuce_defconfig
-endif
+# ANT+
+BOARD_ANT_WIRELESS_DEVICE := "vfs-prerelease"
 
-BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := $(DEVICE_PATH)/bluetooth
+# Audio
+BOARD_USES_ALSA_AUDIO := true
+AUDIO_FEATURE_ENABLED_ANC_HEADSET := true
+AUDIO_FEATURE_ENABLED_COMPRESS_VOIP := true
+AUDIO_FEATURE_ENABLED_CUSTOMSTEREO := true
+AUDIO_FEATURE_ENABLED_EXTN_FORMATS := true
+AUDIO_FEATURE_ENABLED_FLUENCE := true
+AUDIO_FEATURE_ENABLED_HDMI_SPK := true
+AUDIO_FEATURE_ENABLED_HDMI_EDID := true
+AUDIO_FEATURE_ENABLED_HFP := true
+AUDIO_FEATURE_ENABLED_PROXY_DEVICE := true
+AUDIO_FEATURE_ENABLED_SPKR_PROTECTION := true
+AUDIO_FEATURE_ENABLED_KPI_OPTIMIZE := true
+# AUDIO_FEATURE_DEEP_BUFFER_RINGTONE := true
+TARGET_USES_QCOM_MM_AUDIO := true
+AUDIO_FEATURE_ENABLED_EXTN_POST_PROC := true
+AUDIO_FEATURE_PCM_IOCTL_ENABLED := true
+
+# Bluetooth
+BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/yu/lettuce/bluetooth
+BOARD_HAVE_BLUETOOTH := true
+BOARD_HAVE_BLUETOOTH_QCOM := true
+BLUETOOTH_HCI_USE_MCT := true
 
 # Camera
-BOARD_CAMERA_SENSORS := \
-    ov5670_q5v41b \
-    ov8865_q8v18a
+BOARD_CAMERA_SENSORS := ov5670_q5v41b ov8865_q8v18a
 TARGET_USE_VENDOR_CAMERA_EXT := true
 USE_DEVICE_SPECIFIC_CAMERA := true
 
-# CMHW
-BOARD_HARDWARE_CLASS += $(DEVICE_PATH)/cmhw/src
+# FM
+TARGET_QCOM_NO_FM_FIRMWARE := true
+AUDIO_FEATURE_ENABLED_FM := true
 
-# CPU
-TARGET_CPU_CORTEX_A53 := true
-
-# GPS
-TARGET_GPS_HAL_PATH := $(DEVICE_PATH)/gps
-TARGET_NO_RPC := true
+# Init
+TARGET_LIBINIT_DEFINES_FILE := device/yu/lettuce/init/init_lettuce.cpp
 
 # Lights
 TARGET_PROVIDES_LIBLIGHT := true
 
+# Kernel
+BOARD_KERNEL_CMDLINE := console=ttyHSL0,115200,n8 androidboot.console=ttyHSL0 androidboot.hardware=qcom msm_rtb.filter=0x237 ehci-hcd.park=3 androidboot.bootdevice=7824900.sdhci lpm_levels.sleep_disabled=1
+TARGET_KERNEL_CONFIG := cyanogenmod_lettuce-64_defconfig
+
 # Partitions
 BOARD_FLASH_BLOCK_SIZE := 131072
 BOARD_BOOTIMAGE_PARTITION_SIZE := 33554432
-BOARD_CACHEIMAGE_FILE_SYSTEM_TYPE := ext4
 BOARD_CACHEIMAGE_PARTITION_SIZE := 67108864
 BOARD_PERSISTIMAGE_PARTITION_SIZE := 33554432
 BOARD_RECOVERYIMAGE_PARTITION_SIZE := 33554432
 BOARD_SYSTEMIMAGE_PARTITION_SIZE := 2147483648
 BOARD_USERDATAIMAGE_PARTITION_SIZE := 13042155008
+BOARD_CACHEIMAGE_FILE_SYSTEM_TYPE := ext4
+
+# Qualcomm support
+BOARD_USES_QCOM_HARDWARE := true
 
 # Recovery
-TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/rootdir/etc/fstab.qcom
+TARGET_USERIMAGES_USE_EXT4 := true
+TARGET_RECOVERY_FSTAB := device/yu/lettuce/fstab.qcom
+
+# Releasetools
+TARGET_RELEASETOOLS_EXTENSIONS := device/yu/lettuce/
+
+# SELinux
+include device/qcom/sepolicy/sepolicy.mk
 
 BOARD_SEPOLICY_DIRS += \
     device/yu/lettuce/sepolicy
 
-BOARD_SEPOLICY_UNION += \
-    file.te \
-    system_server.te \
-    file_contexts
+# Time services
+BOARD_USES_QC_TIME_SERVICES := true
 
-TARGET_SYSTEM_PROP += $(DEVICE_PATH)/system.prop
+# Video
+TARGET_HAVE_SIGNED_VENUS_FW := true
+
+# Vold
+TARGET_USE_CUSTOM_LUN_FILE_PATH := /sys/devices/platform/msm_hsusb/gadget/lun%d/file
+
+# Wifi
+BOARD_HAS_QCOM_WLAN := true
+BOARD_HAS_QCOM_WLAN_SDK := true
+BOARD_HOSTAPD_DRIVER := NL80211
+BOARD_HOSTAPD_PRIVATE_LIB := lib_driver_cmd_qcwcn
+BOARD_WLAN_DEVICE := qcwcn
+BOARD_WPA_SUPPLICANT_DRIVER := NL80211
+BOARD_WPA_SUPPLICANT_PRIVATE_LIB := lib_driver_cmd_qcwcn
+TARGET_USES_QCOM_WCNSS_QMI := true
+TARGET_USES_WCNSS_CTRL := true
+WIFI_DRIVER_FW_PATH_AP := "ap"
+WIFI_DRIVER_FW_PATH_STA := "sta"
+WIFI_DRIVER_MODULE_PATH := "/system/lib/modules/wlan.ko"
+WIFI_DRIVER_MODULE_NAME := "wlan"
+WPA_SUPPLICANT_VERSION := VER_0_8_X
 
 # inherit from the proprietary version
 -include vendor/yu/lettuce/BoardConfigVendor.mk
