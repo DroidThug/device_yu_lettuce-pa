@@ -38,6 +38,16 @@ BOARD_CAMERA_SENSORS := \
 TARGET_USE_VENDOR_CAMERA_EXT := true
 USE_DEVICE_SPECIFIC_CAMERA := true
 
+# Enable dex-preoptimization to speed up first boot sequence
+ifeq ($(HOST_OS),linux)
+  ifeq ($(TARGET_BUILD_VARIANT),user)
+    ifeq ($(WITH_DEXPREOPT),)
+      WITH_DEXPREOPT := true
+    endif
+  endif
+endif
+DONT_DEXPREOPT_PREBUILTS := true
+
 # CPU
 TARGET_CPU_CORTEX_A53 := true
 
