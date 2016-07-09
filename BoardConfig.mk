@@ -68,6 +68,8 @@ BOARD_CUSTOM_BOOTIMG_MK := device/yu/lettuce/mkbootimg.mk
 BOARD_KERNEL_CMDLINE := console=ttyHSL0,115200,n8 androidboot.console=ttyHSL0 androidboot.hardware=qcom msm_rtb.filter=0x237 ehci-hcd.park=3 androidboot.bootdevice=7824900.sdhci lpm_levels.sleep_disabled=1
 KERNEL_DEFCONFIG := cyanogenmod_lettuce-64_defconfig
 TARGET_USE_CM_RAMDISK := true
+TARGET_KERNEL_CONFIG := cyanogenmod_lettuce-64_defconfig 
+TARGET_KERNEL_SOURCE := kernel/cyanogen/msm8916
 
 # Partitions
 BOARD_BOOTIMAGE_PARTITION_SIZE := 33554432
